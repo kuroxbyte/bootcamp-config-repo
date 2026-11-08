@@ -1,0 +1,6 @@
+# Configuración común a todos los servicios.
+spring:
+  data:
+    mongodb:
+      # Crea los índices declarados con @Indexed y @CompoundIndex en los documentos.
+      auto-index-creation: true

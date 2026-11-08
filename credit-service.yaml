@@ -1,0 +1,12 @@
+server:
+  port: ${SERVER_PORT:8083}
+
+spring:
+  mongodb:
+    # Una base de datos por microservicio.
+    uri: ${MONGODB_URI:mongodb://localhost:27017/credit_db}
+
+clients:
+  customer-service:
+    base-url: ${CUSTOMER_SERVICE_URL:http://localhost:8081}
+    timeout: 3s

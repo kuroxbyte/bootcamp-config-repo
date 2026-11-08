@@ -1,0 +1,7 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  mongodb:
+    # Una base de datos por microservicio.
+    uri: ${MONGODB_URI:mongodb://localhost:27017/customer_db}
