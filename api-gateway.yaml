@@ -1,0 +1,42 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          # Las URIs lb:// se resuelven con las instancias registradas en Eureka.
+          routes:
+            # Transacciones anidadas bajo cada producto (más específicas, se evalúan primero).
+            - id: account-transactions
+              uri: lb://transaction-service
+              order: 0
+              predicates:
+                - Path=/api/v1/accounts/*/deposits,/api/v1/accounts/*/withdrawals,/api/v1/accounts/*/balance,/api/v1/accounts/*/movements
+            - id: credit-transactions
+              uri: lb://transaction-service
+              order: 0
+              predicates:
+                - Path=/api/v1/credits/*/payments,/api/v1/credits/*/movements
+            - id: credit-card-transactions
+              uri: lb://transaction-service
+              order: 0
+              predicates:
+                - Path=/api/v1/credit-cards/*/charges,/api/v1/credit-cards/*/payments,/api/v1/credit-cards/*/available-credit,/api/v1/credit-cards/*/movements
+            # Productos y clientes.
+            - id: customers
+              uri: lb://customer-service
+              order: 1
+              predicates:
+                - Path=/api/v1/customers,/api/v1/customers/**
+            - id: accounts
+              uri: lb://account-service
+              order: 1
+              predicates:
+                - Path=/api/v1/accounts,/api/v1/accounts/**
+            - id: credits
+              uri: lb://credit-service
+              order: 1
+              predicates:
+                - Path=/api/v1/credits,/api/v1/credits/**,/api/v1/credit-cards,/api/v1/credit-cards/**
