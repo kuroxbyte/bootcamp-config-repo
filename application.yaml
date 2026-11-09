@@ -4,3 +4,12 @@ spring:
     mongodb:
       # Crea los índices declarados con @Indexed y @CompoundIndex en los documentos.
       auto-index-creation: true
+
+eureka:
+  client:
+    # Registro de APIs (discovery-server).
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+  instance:
+    # Se registra con la IP del contenedor para que otros servicios lo alcancen.
+    prefer-ip-address: true
