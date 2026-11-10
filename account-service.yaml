@@ -10,6 +10,8 @@ spring:
 clients:
   customer-service:
     base-url: ${CUSTOMER_SERVICE_URL:http://customer-service}
+  credit-service:
+    base-url: ${CREDIT_SERVICE_URL:http://credit-service}
 
 # Monto mínimo de apertura por tipo de cuenta; puede ser 0.
 accounts:
@@ -17,3 +19,6 @@ accounts:
     savings: ${MIN_OPENING_SAVINGS:0}
     checking: ${MIN_OPENING_CHECKING:0}
     fixed-term: ${MIN_OPENING_FIXED_TERM:0}
+  # Monto mínimo de promedio diario que exige cada mes la cuenta de ahorro VIP.
+  vip-savings:
+    minimum-daily-average: ${MIN_DAILY_AVERAGE_VIP:500}

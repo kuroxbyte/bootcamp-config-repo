@@ -14,7 +14,7 @@ spring:
               uri: lb://transaction-service
               order: 0
               predicates:
-                - Path=/api/v1/accounts/*/deposits,/api/v1/accounts/*/withdrawals,/api/v1/accounts/*/balance,/api/v1/accounts/*/movements
+                - Path=/api/v1/accounts/*/deposits,/api/v1/accounts/*/withdrawals,/api/v1/accounts/*/balance,/api/v1/accounts/*/daily-average,/api/v1/accounts/*/movements
               filters:
                 - name: CircuitBreaker
                   args:
