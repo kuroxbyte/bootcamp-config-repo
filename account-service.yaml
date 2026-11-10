@@ -10,3 +10,10 @@ spring:
 clients:
   customer-service:
     base-url: ${CUSTOMER_SERVICE_URL:http://customer-service}
+
+# Monto mínimo de apertura por tipo de cuenta; puede ser 0.
+accounts:
+  minimum-opening-amount:
+    savings: ${MIN_OPENING_SAVINGS:0}
+    checking: ${MIN_OPENING_CHECKING:0}
+    fixed-term: ${MIN_OPENING_FIXED_TERM:0}
