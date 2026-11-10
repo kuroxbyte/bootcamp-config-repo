@@ -10,9 +10,17 @@ eureka:
     # Registro de APIs (discovery-server).
     service-url:
       defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+    # Actualiza cada 5 s la lista de instancias (por defecto 30 s).
+    registry-fetch-interval-seconds: 5
   instance:
     # Se registra con la IP del contenedor para que otros servicios lo alcancen.
     prefer-ip-address: true
+    # Heartbeat cada 5 s; si falta 15 s, la instancia se da de baja.
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15
+
+# Las instancias resueltas por Eureka se guardan 5 s en caché (por defecto 35 s).
+spring.cloud.loadbalancer.cache.ttl: 5s
 
 # Circuit breaker de las llamadas a otros servicios (Resilience4j).
 resilience4j:
