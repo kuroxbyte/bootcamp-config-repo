@@ -13,3 +13,22 @@ eureka:
   instance:
     # Se registra con la IP del contenedor para que otros servicios lo alcancen.
     prefer-ip-address: true
+
+# Circuit breaker de las llamadas a otros servicios (Resilience4j).
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+  timelimiter:
+    configs:
+      default:
+        # Tiempo máximo de espera de cada llamada.
+        timeout-duration: 2s
+        cancel-running-future: true
