@@ -6,8 +6,9 @@ spring:
     # Una base de datos por microservicio.
     uri: ${MONGODB_URI:mongodb://localhost:27017/transaction_db}
 
+# Los servicios consultados se resuelven por su nombre en Eureka.
 clients:
   account-service:
-    base-url: ${ACCOUNT_SERVICE_URL:http://localhost:8082}
+    base-url: ${ACCOUNT_SERVICE_URL:http://account-service}
   credit-service:
-    base-url: ${CREDIT_SERVICE_URL:http://localhost:8083}
+    base-url: ${CREDIT_SERVICE_URL:http://credit-service}
