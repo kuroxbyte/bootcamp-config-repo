@@ -9,6 +9,17 @@ spring:
           # Las URIs lb:// se resuelven con las instancias registradas en Eureka. Cada ruta tiene su
           # circuit breaker (timeout de 2 s en application.yaml); si falla, responde /fallback (503).
           routes:
+            # Reportes del banco.
+            - id: reports
+              uri: lb://transaction-service
+              order: 0
+              predicates:
+                - Path=/api/v1/reports/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: reports
+                    fallbackUri: forward:/fallback
             # Transacciones anidadas bajo cada producto (más específicas, se evalúan primero).
             - id: account-transactions
               uri: lb://transaction-service
