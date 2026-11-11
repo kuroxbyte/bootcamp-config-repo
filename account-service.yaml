@@ -22,3 +22,15 @@ accounts:
   # Monto mínimo de promedio diario que exige cada mes la cuenta de ahorro VIP.
   vip-savings:
     minimum-daily-average: ${MIN_DAILY_AVERAGE_VIP:500}
+  # Comisión por transacción: cada mes, los depósitos y retiros que superan
+  # free-monthly-transactions pagan amount cada uno.
+  transaction-fee:
+    savings:
+      free-monthly-transactions: ${FREE_TRANSACTIONS_SAVINGS:4}
+      amount: ${TRANSACTION_FEE_SAVINGS:1.00}
+    checking:
+      free-monthly-transactions: ${FREE_TRANSACTIONS_CHECKING:3}
+      amount: ${TRANSACTION_FEE_CHECKING:2.00}
+    fixed-term:
+      free-monthly-transactions: ${FREE_TRANSACTIONS_FIXED_TERM:1}
+      amount: ${TRANSACTION_FEE_FIXED_TERM:5.00}
