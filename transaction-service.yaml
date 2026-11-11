@@ -4,7 +4,7 @@ server:
 spring:
   mongodb:
     # Una base de datos por microservicio.
-    uri: ${MONGODB_URI:mongodb://localhost:27017/transaction_db}
+    uri: ${MONGODB_URI:mongodb://localhost:27020/transaction_db}
 
 # Los servicios consultados se resuelven por su nombre en Eureka.
 clients:
