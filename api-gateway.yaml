@@ -51,6 +51,17 @@ spring:
                   args:
                     name: credit-card-transactions
                     fallbackUri: forward:/fallback
+            # Registro e inicio de sesión (públicos).
+            - id: auth
+              uri: lb://auth-service
+              order: 1
+              predicates:
+                - Path=/api/v1/auth/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: auth
+                    fallbackUri: forward:/fallback
             # Productos y clientes.
             - id: customers
               uri: lb://customer-service
@@ -82,3 +93,9 @@ spring:
                   args:
                     name: credits
                     fallbackUri: forward:/fallback
+
+# Validación de los JWT de auth-service (RS256). Clave pública en Base64 (DER, sin encabezados PEM).
+# SOLO DESARROLLO: en otro entorno se reemplaza con JWT_PUBLIC_KEY.
+jwt:
+  issuer: bank-auth-service
+  public-key: ${JWT_PUBLIC_KEY:MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAl9YFD2mchK0+trJaWZdAhS2DxTngoTZwMiHvhy4d5YGtwRIbT02o4xlAziBHpfUnnH0cICV0OsXJ1NBSUDbpBeiQsPop3isMN8G9J9YqU/ntc8kz8BLABKvJVs/rqMgd6WRs5DQsDI72Lp5hJxU6H9E1hW6qg1xP0gdApMxacrFJI+1r+W1B0NeFY9Oawg56T5wxsEUvpiSkgE+6V084uSw+MLmNKIjxVybkqZMukcwHdO4QSyvvAubYfJQeP4ZgyqvYB1kFnHDXpZjjgJcF/Eq/yVWbeAT5uPO+qQkRPGv1RsyY06kJqjqAG86qF3KYM+AWpw/ZAdE3oIe4zPdb4wIDAQAB}
