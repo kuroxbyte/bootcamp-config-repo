@@ -5,3 +5,15 @@ spring:
   mongodb:
     # Una base de datos por microservicio.
     uri: ${MONGODB_URI:mongodb://localhost:27017/customer_db}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # Espera la confirmación de todas las réplicas antes de dar el evento por publicado.
+      acks: all
+
+# Tópicos de eventos (Kafka).
+messaging:
+  topics:
+    customer-events: customer-events

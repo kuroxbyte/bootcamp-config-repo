@@ -1,0 +1,37 @@
+server:
+  port: ${SERVER_PORT:8085}
+
+spring:
+  mongodb:
+    # Una base de datos por microservicio.
+    uri: ${MONGODB_URI:mongodb://localhost:27021/auth_db}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: auth-service
+      # Un auth-service nuevo procesa también los clientes creados antes de que arrancara.
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+# Tópicos de eventos (Kafka).
+messaging:
+  topics:
+    customer-events: customer-events
+
+# Caché de la copia local de clientes (datos maestros) en Redis.
+cache:
+  customers:
+    ttl: ${CACHE_CUSTOMERS_TTL:10m}
+
+# Tokens JWT firmados con RS256. Claves RSA en Base64 (DER, sin encabezados PEM).
+# SOLO DESARROLLO: en otro entorno se reemplazan con JWT_PRIVATE_KEY y JWT_PUBLIC_KEY.
+jwt:
+  issuer: bank-auth-service
+  expiration: ${JWT_EXPIRATION:1h}
+  private-key: ${JWT_PRIVATE_KEY:MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCX1gUPaZyErT62slpZl0CFLYPFOeChNnAyIe+HLh3lga3BEhtPTajjGUDOIEel9SecfRwgJXQ6xcnU0FJQNukF6JCw+ineKww3wb0n1ipT+e1zyTPwEsAEq8lWz+uoyB3pZGzkNCwMjvYunmEnFTof0TWFbqqDXE/SB0CkzFpysUkj7Wv5bUHQ14Vj05rCDnpPnDGwRS+mJKSAT7pXTzi5LD4wuY0oiPFXJuSpky6RzAd07hBLK+8C5th8lB4/hmDKq9gHWQWccNelmOOAlwX8Sr/JVZt4BPm4876pCRE8a/VGzJjTqQmqOoAbzqoXcpgz4BanD9kB0Tegh7jM91vjAgMBAAECggEAHadjapyuQG1Te7v+kFPNepUmkJzapbGrnObq0IRtu1al2DjQk57vtpbGhNtiEuP73gDDPvYBqr7ZSdJ72QW4YfqHU8Ev7x+KLdONPVwC/U6pFP19Qsxuqxrf4jAObvLSgLQn3jPgTH2ZUAaHo+nt5avm3437CFe9kR/wfJ8apR50vGsSVzjDrIZiRrFixDIErr00hipbyAeiwRYivxlXYzJIcFKIp0TporK4bzuZlbnpaNFOG9zbXdj7euP46UbJ0t1kaJwiVt0fymgRRSQaa7lwB3tAbUlo31w9BaSWToQabf1AsdfxMzPup2dKJI3mzkGgHTlVgnp2XlHPI9NfZQKBgQDN88j2uS7j0u5ZvT9ikGq7STByhNfHhG1mKS78Ab2Bh+8XJbqODf9ocktBfcI8X83BiV5H1XQOcJTF9Ru/+B3H4b6jrEygKc4LGkUejW26AQcam+/EMkJZAwgdEmHYOyTJyG1nHRssbvDlXrCr+IaKLk7c5BeGwczlghxn4Uue1QKBgQC8u66EqmppNNyfvmL9B6wb5MB2/Um02NCJ8FiZWR4Z8ghyn7FDkf2XV6Kke2250Qoe8a13NptC84mT937aPSJaQR2e9bQftIJdWWsJZfp0KBGeQjkXS1LhVnbotCHWpiqPU2Bj+68idh3+4D1aW4YImS824m6pRve7vMB4YSKb1wKBgQCXuLibyeCZRZMB2UEQw4NdZZWjR+oOuag+UqiiTkXlXtbsHodIj1dRAqIeJR8qiwlxQlmKYd2Vpap0CxXeXlLSJaPjv9LTSvjXhQrWbyoelRM+rxH7X2sxV+JqSFh8i1WWsWinRfH20eP1lcRhbDzxHxxJ7l7Gj476pNd4T6j94QKBgQCOOjGuMG64kemhSGx4mouNCbow8XfWHX4qNUHPbmVM0CSlnMqNTTt6DcS3h3yNB4dFAoPizvf6YGVRaLXj6SY2NdQIssjnC7Uie/w5vOwdFQUR6n3znAP9ZJd/jh/iDp8MG50MO+MjaTf5lyslKMu9NxNpnQIf9ydCB2BUV38pSQKBgAR3J/UnRl2/jakFkVgrL6v8eMNxhLTvRdrsBgRlK7L4pFSXMzFigdLf0PW6eRzI4bvwbmXxD1UpN0xSHmi3Pfq3zlLN4CmyVvt/pQ2CsctZdobhqtJxU0utPKwDyIh06XOc0BkPehrshkNtGmnyDTvEj82SpFZIC8vIePMjyIjE}
+  public-key: ${JWT_PUBLIC_KEY:MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAl9YFD2mchK0+trJaWZdAhS2DxTngoTZwMiHvhy4d5YGtwRIbT02o4xlAziBHpfUnnH0cICV0OsXJ1NBSUDbpBeiQsPop3isMN8G9J9YqU/ntc8kz8BLABKvJVs/rqMgd6WRs5DQsDI72Lp5hJxU6H9E1hW6qg1xP0gdApMxacrFJI+1r+W1B0NeFY9Oawg56T5wxsEUvpiSkgE+6V084uSw+MLmNKIjxVybkqZMukcwHdO4QSyvvAubYfJQeP4ZgyqvYB1kFnHDXpZjjgJcF/Eq/yVWbeAT5uPO+qQkRPGv1RsyY06kJqjqAG86qF3KYM+AWpw/ZAdE3oIe4zPdb4wIDAQAB}
