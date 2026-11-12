@@ -51,6 +51,17 @@ spring:
                   args:
                     name: credit-card-transactions
                     fallbackUri: forward:/fallback
+            # Pagos con tarjeta de débito (más específico que la ruta de tarjetas de account-service).
+            - id: debit-card-transactions
+              uri: lb://transaction-service
+              order: 0
+              predicates:
+                - Path=/api/v1/debit-cards/*/payments
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: debit-card-transactions
+                    fallbackUri: forward:/fallback
             # Registro e inicio de sesión (públicos).
             - id: auth
               uri: lb://auth-service
@@ -77,7 +88,7 @@ spring:
               uri: lb://account-service
               order: 1
               predicates:
-                - Path=/api/v1/accounts,/api/v1/accounts/**
+                - Path=/api/v1/accounts,/api/v1/accounts/**,/api/v1/debit-cards,/api/v1/debit-cards/**
               filters:
                 - name: CircuitBreaker
                   args:

@@ -5,6 +5,10 @@ spring:
   mongodb:
     # Una base de datos por microservicio.
     uri: ${MONGODB_URI:mongodb://localhost:27020/transaction_db}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     producer:
@@ -14,6 +18,11 @@ spring:
       properties:
         # Si el broker no responde, se deja de esperar en 1 s (el gateway corta a los 2 s).
         max.block.ms: 1000
+    consumer:
+      group-id: transaction-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 # Los servicios consultados se resuelven por su nombre en Eureka.
 clients:
@@ -22,7 +31,14 @@ clients:
   credit-service:
     base-url: ${CREDIT_SERVICE_URL:http://credit-service}
 
-# Tópicos de eventos (Kafka): publica los pagos y consumos de productos de crédito.
+# Tópicos de eventos (Kafka): publica los pagos y consumos de productos de crédito y consume las
+# tarjetas de débito de account-service.
 messaging:
   topics:
     transaction-events: transaction-events
+    debit-card-events: debit-card-events
+
+# Caché en Redis de la copia local de las tarjetas de débito.
+cache:
+  debit-cards:
+    ttl: ${CACHE_DEBIT_CARDS_TTL:10m}
