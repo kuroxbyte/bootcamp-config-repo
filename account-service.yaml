@@ -5,6 +5,17 @@ spring:
   mongodb:
     # Una base de datos por microservicio.
     uri: ${MONGODB_URI:mongodb://localhost:27018/account_db}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: account-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 # Los servicios consultados se resuelven por su nombre en Eureka.
 clients:
@@ -34,3 +45,13 @@ accounts:
     fixed-term:
       free-monthly-transactions: ${FREE_TRANSACTIONS_FIXED_TERM:1}
       amount: ${TRANSACTION_FEE_FIXED_TERM:5.00}
+
+# Tópicos de eventos (Kafka): consume debt-events.
+messaging:
+  topics:
+    debt-events: debt-events
+
+# Caché en Redis de la copia local del estado de deuda de cada cliente.
+cache:
+  debt-status:
+    ttl: ${CACHE_DEBT_STATUS_TTL:10m}

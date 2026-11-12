@@ -5,6 +5,15 @@ spring:
   mongodb:
     # Una base de datos por microservicio.
     uri: ${MONGODB_URI:mongodb://localhost:27020/transaction_db}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      properties:
+        # Si el broker no responde, se deja de esperar en 1 s (el gateway corta a los 2 s).
+        max.block.ms: 1000
 
 # Los servicios consultados se resuelven por su nombre en Eureka.
 clients:
@@ -12,3 +21,8 @@ clients:
     base-url: ${ACCOUNT_SERVICE_URL:http://account-service}
   credit-service:
     base-url: ${CREDIT_SERVICE_URL:http://credit-service}
+
+# Tópicos de eventos (Kafka): publica los pagos y consumos de productos de crédito.
+messaging:
+  topics:
+    transaction-events: transaction-events

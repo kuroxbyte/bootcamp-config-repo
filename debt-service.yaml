@@ -1,0 +1,41 @@
+server:
+  port: ${SERVER_PORT:8086}
+
+spring:
+  mongodb:
+    # Una base de datos por microservicio.
+    uri: ${MONGODB_URI:mongodb://localhost:27022/debt_db}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      properties:
+        max.block.ms: 5000
+    consumer:
+      group-id: debt-service
+      # Un debt-service nuevo procesa también los productos y transacciones anteriores.
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+# Tópicos de eventos (Kafka): consume credit-events y transaction-events, publica debt-events.
+messaging:
+  topics:
+    credit-events: credit-events
+    transaction-events: transaction-events
+    debt-events: debt-events
+
+debt:
+  evaluation:
+    # Revisión diaria de vencimientos (00:05).
+    cron: ${DEBT_EVALUATION_CRON:0 5 0 * * *}
+    # Adelanta la fecha de evaluación; solo para las pruebas de punta a punta.
+    days-ahead: ${DEBT_EVALUATION_DAYS_AHEAD:0}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
