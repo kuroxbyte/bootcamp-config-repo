@@ -35,7 +35,7 @@ spring:
               uri: lb://transaction-service
               order: 0
               predicates:
-                - Path=/api/v1/credits/*/payments,/api/v1/credits/*/movements
+                - Path=/api/v1/credits/*/payments,/api/v1/credits/*/payments/third-party,/api/v1/credits/*/movements
               filters:
                 - name: CircuitBreaker
                   args:
@@ -45,7 +45,7 @@ spring:
               uri: lb://transaction-service
               order: 0
               predicates:
-                - Path=/api/v1/credit-cards/*/charges,/api/v1/credit-cards/*/payments,/api/v1/credit-cards/*/available-credit,/api/v1/credit-cards/*/movements
+                - Path=/api/v1/credit-cards/*/charges,/api/v1/credit-cards/*/payments,/api/v1/credit-cards/*/payments/third-party,/api/v1/credit-cards/*/available-credit,/api/v1/credit-cards/*/movements
               filters:
                 - name: CircuitBreaker
                   args:
