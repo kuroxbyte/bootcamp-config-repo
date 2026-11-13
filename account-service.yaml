@@ -11,6 +11,13 @@ spring:
       port: ${REDIS_PORT:6379}
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      properties:
+        # Si el broker no responde, se deja de esperar en 1 s (el gateway corta a los 2 s).
+        max.block.ms: 1000
     consumer:
       group-id: account-service
       auto-offset-reset: earliest
@@ -46,10 +53,11 @@ accounts:
       free-monthly-transactions: ${FREE_TRANSACTIONS_FIXED_TERM:1}
       amount: ${TRANSACTION_FEE_FIXED_TERM:5.00}
 
-# Tópicos de eventos (Kafka): consume debt-events.
+# Tópicos de eventos (Kafka): consume debt-events y publica debit-card-events.
 messaging:
   topics:
     debt-events: debt-events
+    debit-card-events: debit-card-events
 
 # Caché en Redis de la copia local del estado de deuda de cada cliente.
 cache:
