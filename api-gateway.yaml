@@ -73,6 +73,17 @@ spring:
                   args:
                     name: auth
                     fallbackUri: forward:/fallback
+            # Monedero móvil Yanki.
+            - id: yanki
+              uri: lb://yanki-service
+              order: 1
+              predicates:
+                - Path=/api/v1/yanki/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: yanki
+                    fallbackUri: forward:/fallback
             # Productos y clientes.
             - id: customers
               uri: lb://customer-service

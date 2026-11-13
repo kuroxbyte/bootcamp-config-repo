@@ -1,0 +1,43 @@
+server:
+  port: ${SERVER_PORT:8087}
+
+spring:
+  mongodb:
+    # Una base de datos por microservicio.
+    uri: ${MONGODB_URI:mongodb://localhost:27023/yanki_db}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      properties:
+        # Si el broker no responde, se deja de esperar en 1 s (el gateway corta a los 2 s).
+        max.block.ms: 1000
+    consumer:
+      group-id: yanki-service
+      # Un yanki-service nuevo procesa también las tarjetas emitidas antes de que arrancara.
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+# Tópicos de eventos (Kafka): publica yanki-events y yanki-operations; consume
+# yanki-operation-results de transaction-service y debit-card-events de account-service.
+# yanki-service no llama a la API REST de otros microservicios.
+messaging:
+  topics:
+    yanki-events: yanki-events
+    yanki-operations: yanki-operations
+    yanki-operation-results: yanki-operation-results
+    debit-card-events: debit-card-events
+
+# Caché en Redis de la copia local de las tarjetas de débito y del monedero de cada celular.
+cache:
+  debit-cards:
+    ttl: ${CACHE_DEBIT_CARDS_TTL:10m}
+  wallet-phones:
+    ttl: ${CACHE_WALLET_PHONES_TTL:10m}

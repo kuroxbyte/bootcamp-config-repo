@@ -31,12 +31,15 @@ clients:
   credit-service:
     base-url: ${CREDIT_SERVICE_URL:http://credit-service}
 
-# Tópicos de eventos (Kafka): publica los pagos y consumos de productos de crédito y consume las
-# tarjetas de débito de account-service.
+# Tópicos de eventos (Kafka): publica los pagos y consumos de productos de crédito y las respuestas
+# a las operaciones Yanki; consume las tarjetas de débito de account-service y los cargos y abonos
+# que pide yanki-service.
 messaging:
   topics:
     transaction-events: transaction-events
     debit-card-events: debit-card-events
+    yanki-operations: yanki-operations
+    yanki-operation-results: yanki-operation-results
 
 # Caché en Redis de la copia local de las tarjetas de débito.
 cache:
