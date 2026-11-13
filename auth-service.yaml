@@ -13,20 +13,24 @@ spring:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
       group-id: auth-service
-      # Un auth-service nuevo procesa también los clientes creados antes de que arrancara.
+      # Un auth-service nuevo procesa también los clientes y monederos creados antes de que
+      # arrancara.
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
-# Tópicos de eventos (Kafka).
+# Tópicos de eventos (Kafka): consume customer-events y yanki-events.
 messaging:
   topics:
     customer-events: customer-events
+    yanki-events: yanki-events
 
-# Caché de la copia local de clientes (datos maestros) en Redis.
+# Caché de la copia local de clientes y monederos (datos maestros) en Redis.
 cache:
   customers:
     ttl: ${CACHE_CUSTOMERS_TTL:10m}
+  wallets:
+    ttl: ${CACHE_WALLETS_TTL:10m}
 
 # Tokens JWT firmados con RS256. Claves RSA en Base64 (DER, sin encabezados PEM).
 # SOLO DESARROLLO: en otro entorno se reemplazan con JWT_PRIVATE_KEY y JWT_PUBLIC_KEY.
