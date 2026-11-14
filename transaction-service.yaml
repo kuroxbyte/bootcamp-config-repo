@@ -45,3 +45,12 @@ messaging:
 cache:
   debit-cards:
     ttl: ${CACHE_DEBIT_CARDS_TTL:10m}
+
+# Comisiones mensuales: al empezar cada mes se cobra el mantenimiento de las cuentas corrientes y,
+# a las cuentas de ahorro VIP cuyo promedio diario del mes anterior no alcanzó el mínimo, esta
+# comisión.
+fees:
+  monthly:
+    # Día 1 de cada mes a las 00:15.
+    cron: ${MONTHLY_FEES_CRON:0 15 0 1 * *}
+    minimum-average-fee: ${MINIMUM_AVERAGE_FEE:15.00}
