@@ -30,6 +30,9 @@ clients:
     base-url: ${CUSTOMER_SERVICE_URL:http://customer-service}
   credit-service:
     base-url: ${CREDIT_SERVICE_URL:http://credit-service}
+  # Para dar de baja una cuenta se consulta su saldo.
+  transaction-service:
+    base-url: ${TRANSACTION_SERVICE_URL:http://transaction-service}
 
 # Monto mínimo de apertura por tipo de cuenta; puede ser 0.
 accounts:
