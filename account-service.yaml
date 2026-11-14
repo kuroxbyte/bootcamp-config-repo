@@ -6,6 +6,10 @@ spring:
     # Una base de datos por microservicio.
     uri: ${MONGODB_URI:mongodb://localhost:27018/account_db}
   data:
+    mongodb:
+      # IndexMigration crea y actualiza los índices al arrancar; la creación automática de Spring
+      # no puede modificar un índice existente y registraría un error.
+      auto-index-creation: false
     redis:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
