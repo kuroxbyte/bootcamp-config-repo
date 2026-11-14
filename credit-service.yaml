@@ -28,6 +28,9 @@ spring:
 clients:
   customer-service:
     base-url: ${CUSTOMER_SERVICE_URL:http://customer-service}
+  # Para modificar o dar de baja un producto de crédito se consulta su deuda.
+  transaction-service:
+    base-url: ${TRANSACTION_SERVICE_URL:http://transaction-service}
 
 # Tópicos de eventos (Kafka): publica credit-events y consume debt-events.
 messaging:

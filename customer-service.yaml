@@ -20,3 +20,11 @@ spring:
 messaging:
   topics:
     customer-events: customer-events
+
+# Al dar de baja un cliente se verifica que no tenga productos activos. Los servicios consultados
+# se resuelven por su nombre en Eureka.
+clients:
+  account-service:
+    base-url: ${ACCOUNT_SERVICE_URL:http://account-service}
+  credit-service:
+    base-url: ${CREDIT_SERVICE_URL:http://credit-service}
